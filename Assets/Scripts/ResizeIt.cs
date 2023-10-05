@@ -4,25 +4,29 @@ using UnityEngine;
 
 public class ResizeIt : MonoBehaviour
 {
-    void Start()
+    Vector3 minScale;
+    public Vector3 maxScale;
+    float speed = 1f;
+    float duration = 4f;
+    IEnumerator Start()
     {
-        StartCoroutine(ResizePerSecond());    
-    }
-
-    void Update()
-    {
-        
-    }
-
-    IEnumerator ResizePerSecond()
-    {
+        minScale = transform.localScale;
         while(true)
         {
-            for(int i = 1; i < 5; i++)
-            {
-                yield return new WaitForSeconds(1f);
-                transform.localScale = new Vector3(i, i, i);
-            }
-        }    
+            yield return Resize(minScale, maxScale, duration);
+            transform.localScale = minScale;
+        }
+    }
+
+    public IEnumerator Resize(Vector3 a, Vector3 b, float time)
+    {
+        float i = 0f;
+        float rate = (1.0f / time) * speed;
+        while (i < 1f)
+        {
+            i += Time.deltaTime * rate;
+            transform.localScale = Vector3.Lerp(a, b, i);
+            yield return null;
+        }  
     }
 }
